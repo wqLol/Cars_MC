@@ -1,3 +1,6 @@
 {
-  "item.cars.steering_wheel": "Steering Wheel"
+  "item.cars.steering_wheel": "Steering Wheel",
+  "block.cars.asphalt": "Asphalt",
+
+  "creativetab.cars": "Car Tab"
 }

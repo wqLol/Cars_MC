@@ -1,6 +1,6 @@
-package net.aarav.cars.item;
+package net.aarav.Cars.item;
 
-import net.aarav.cars.Cars;
+import net.aarav.Cars.Cars;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
