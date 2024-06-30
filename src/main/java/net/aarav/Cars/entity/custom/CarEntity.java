@@ -1,5 +1,7 @@
 package net.aarav.Cars.entity.custom;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -9,6 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import org.slf4j.Logger;
 
+import static net.minecraft.util.Mth.cos;
 import static net.minecraft.util.Mth.sin;
 
 public class CarEntity extends Animal {
@@ -32,6 +36,7 @@ public class CarEntity extends Animal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+
 
     }
 
@@ -75,8 +80,18 @@ public class CarEntity extends Animal {
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         return null;
     }
-    public void useCar(Logger LOGGER){
+    public void useCar(){
+        this.setPosRaw(0d,0d,0d);
+    }
 
-
+    @Override
+    public void tick() {
+//        if (Minecraft.getInstance().player!=null) {
+//            Minecraft.getInstance().player.sendSystemMessage(Component.literal("hi"));
+//        }
+        if (this.isVehicle() && Minecraft.getInstance().options.keyUp.isDown()){
+            this.setDeltaMovement(this.getDeltaMovement().add(1d * cos(xRotO),0d,1d * sin(xRotO)));
+        }
+        super.tick();
     }
 }

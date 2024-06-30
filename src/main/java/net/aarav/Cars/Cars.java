@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.commands.GiveCommand;
 import net.minecraft.server.commands.SummonCommand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.animal.ShoulderRidingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
@@ -35,6 +36,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jline.utils.Log;
 import org.slf4j.Logger;
+
+import static net.minecraft.util.Mth.cos;
+import static net.minecraft.util.Mth.sin;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Cars.MOD_ID)
@@ -95,25 +99,43 @@ public class Cars
             CarEntity.setViewScale(20d);
         }
     }
-    @SubscribeEvent
-    public void onKeyInputEvent(InputEvent.Key event) {
-        if (Minecraft.getInstance().options.keyUp.isDown()) {
-            Player player = Minecraft.getInstance().player;
-
-            if (player.isPassenger()){
-                Entity vehicle = player.getVehicle();
-                LOGGER.info(vehicle.getName().toString());
-
-                if (vehicle instanceof CarEntity){
-                    player.sendSystemMessage(Component.literal("hello"));
-                    ((CarEntity) vehicle).useCar(LOGGER);
-
-                }
-            }
-
-//            LOGGER.info("Hello");
-        }
-    }
+//    @SubscribeEvent
+//    public void onKeyInputEvent(InputEvent.Key event) {
+//        if (Minecraft.getInstance().options.keyUp.isDown()) {
+//            Player player = Minecraft.getInstance().player;
+////            Minecraft.getInstance().cameraEntity.
+////            player.setDeltaMovement(2d* sin(player.xRotO+180), 1.0d, 2d* cos(player.xRotO+180));
+//            player.move(MoverType.SELF, new Vec3(1.0d,1.0d,0.0d));
+//            if (player.isPassenger()){
+//
+//
+////                LOGGER.info(player.getVehicle().getName().toString());
+//
+//                if (player.getVehicle() instanceof Entity){
+////                    player.getVehicle().move(MoverType.PLAYER, new Vec3(3d,3d,3d));
+//
+////                    player.sendSystemMessage(Component.literal("Hello"));
+////                    ((CarEntity) player.getVehicle()).useCar();
+//                    Entity vehicle = null;
+//                    vehicle = player.getVehicle();
+////                    vehicle.setInvisible(true);
+////                    player.getVehicle().unRide();
+//                    player.stopRiding();
+//                    player.move(MoverType.SELF, new Vec3(1.0d,1.0d,0.0d));
+//
+//
+//                    player.startRiding(vehicle);
+//
+////                        player.unRide();
+//
+//
+//
+//                }
+//            }
+//
+////            LOGGER.info("Hello");
+//        }
+//    }
 
 
 }
