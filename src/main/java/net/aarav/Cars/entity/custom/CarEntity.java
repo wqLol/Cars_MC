@@ -1,7 +1,13 @@
 package net.aarav.Cars.entity.custom;
 
+import ca.weblite.objc.Client;
+import com.google.common.eventbus.Subscribe;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.DustParticle;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.commands.ParticleCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,6 +24,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.checkerframework.checker.units.qual.Time;
 import org.jetbrains.annotations.Nullable;
 
 import org.slf4j.Logger;
@@ -34,7 +42,7 @@ public class CarEntity extends Animal {
 
         super(pEntityType, pLevel);
     }
-
+    public double Vel= 0;
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -84,6 +92,7 @@ public class CarEntity extends Animal {
     }
 
 
+
     @Override
     public void tick() {
 //        if (Minecraft.getInstance().player!=null) {
@@ -93,33 +102,60 @@ public class CarEntity extends Animal {
 //            this.setYRot(Minecraft.getInstance().player.getYRot() + 90.0f);
 //        }
 //        this.setDeltaMovement(this.getDeltaMovement().add(0.0001d,0d,0.000001d));
+//        Minecraft.getInstance().player.sendSystemMessage(Component.literal(Double.toString(this)));
+        Player player = Minecraft.getInstance().player;
+//        this.setRot(player.getYRot()+90f, player.getXRot() * 0.5F);
+
+
         if (this.isVehicle() && Minecraft.getInstance().options.keyRight.isDown()) {
 
-            this.setYRot(this.getYRot()+5f);
-            this.setDeltaMovement(this.getDeltaMovement().add(0.0001d,0d,0.000001d));
+            this.setYRot(this.getYRot()+2f);
+            this.setDeltaMovement(this.getDeltaMovement().add(0.001d,0d,0.001d));
 
         }
+
         if (this.isVehicle() && Minecraft.getInstance().options.keyLeft.isDown()) {
 
-            this.setYRot(this.getYRot()-5f);
-            this.setDeltaMovement(this.getDeltaMovement().add(0.0001d,0d,0.000001d));
+            this.setYRot(this.getYRot()-2f);
+            this.setDeltaMovement(this.getDeltaMovement().add(0.001d,0d,0.001d));
+
+        }
+
+        if (this.isVehicle() && Minecraft.getInstance().options.keyRight.isDown() && Minecraft.getInstance().options.keySprint.isDown()) {
+
+            this.setYRot(this.getYRot()+3f);
+            this.setDeltaMovement(this.getDeltaMovement().add(0.001d,0d,0.001d));
+
+        }
+
+        if (this.isVehicle() && Minecraft.getInstance().options.keyLeft.isDown() && Minecraft.getInstance().options.keySprint.isDown()) {
+
+            this.setYRot(this.getYRot()-3f);
+            this.setDeltaMovement(this.getDeltaMovement().add(0.001d,0d,0.001d));
 
         }
 
 
         if (this.isVehicle() && Minecraft.getInstance().options.keyUp.isDown()) {
+            this.Vel+=0.001;
+            this.Vel*=1.001;
 
-            double radians = Math.toRadians(round(this.getYRot()));
-            this.setDeltaMovement(this.getDeltaMovement().add(1d * Math.cos(radians), 0d, 1d * Math.sin(radians)));
+
         }
-        if (this.isVehicle() && Minecraft.getInstance().options.keyDown.isDown()) {
+        else if (this.isVehicle() && Minecraft.getInstance().options.keyDown.isDown()) {
+            this.Vel-=0.001;
+            this.Vel*=1.001;
 
-            double radians = Math.toRadians(round(this.getYRot()));
-            this.setDeltaMovement(this.getDeltaMovement().add(-1d * Math.cos(radians), 0d, -1d * Math.sin(radians)));
+
         }
-
-
-
+        else {
+            this.Vel*=0.98;
+        }
+        this.Vel = (this.Vel>15.0f) ? 15.0f:this.Vel;
+        double radians = Math.toRadians(round(this.getYRot()));
+        this.setDeltaMovement(this.getDeltaMovement().add(this.Vel * Math.cos(radians), 0d, this.Vel * Math.sin(radians)));
         super.tick();
     }
+
+
 }
