@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 import org.slf4j.Logger;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.round;
 import static net.minecraft.util.Mth.cos;
 import static net.minecraft.util.Mth.sin;
 
@@ -80,18 +82,44 @@ public class CarEntity extends Animal {
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         return null;
     }
-    public void useCar(){
-        this.setPosRaw(0d,0d,0d);
-    }
+
 
     @Override
     public void tick() {
 //        if (Minecraft.getInstance().player!=null) {
 //            Minecraft.getInstance().player.sendSystemMessage(Component.literal("hi"));
 //        }
-        if (this.isVehicle() && Minecraft.getInstance().options.keyUp.isDown()){
-            this.setDeltaMovement(this.getDeltaMovement().add(1d * cos(xRotO),0d,1d * sin(xRotO)));
+//        if (abs(this.getYRot()-(Minecraft.getInstance().player.getYRot() + 90.0f)) > 30) {
+//            this.setYRot(Minecraft.getInstance().player.getYRot() + 90.0f);
+//        }
+//        this.setDeltaMovement(this.getDeltaMovement().add(0.0001d,0d,0.000001d));
+        if (this.isVehicle() && Minecraft.getInstance().options.keyRight.isDown()) {
+
+            this.setYRot(this.getYRot()+5f);
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0001d,0d,0.000001d));
+
         }
+        if (this.isVehicle() && Minecraft.getInstance().options.keyLeft.isDown()) {
+
+            this.setYRot(this.getYRot()-5f);
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0001d,0d,0.000001d));
+
+        }
+
+
+        if (this.isVehicle() && Minecraft.getInstance().options.keyUp.isDown()) {
+
+            double radians = Math.toRadians(round(this.getYRot()));
+            this.setDeltaMovement(this.getDeltaMovement().add(1d * Math.cos(radians), 0d, 1d * Math.sin(radians)));
+        }
+        if (this.isVehicle() && Minecraft.getInstance().options.keyDown.isDown()) {
+
+            double radians = Math.toRadians(round(this.getYRot()));
+            this.setDeltaMovement(this.getDeltaMovement().add(-1d * Math.cos(radians), 0d, -1d * Math.sin(radians)));
+        }
+
+
+
         super.tick();
     }
 }
